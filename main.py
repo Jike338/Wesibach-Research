@@ -14,12 +14,17 @@ import operator
 #
 # print(*[f'id: {word.id}\tword: {word.text}\thead id: {word.head}\thead: {sent.words[word.head-1].text if word.head > 0 else "root"}\tdeprel: {word.deprel}' for sent in doc.sentences for word in sent.words], sep='\n')
 
+# dictionary for phrase and term
 phrase_l = {}
 term_l = {}
 
+# get the stop words list
 sw_l = stopwords('en')
+
 txt = open("patent_40.txt", "r")
 txt = str(txt.read())
+
+# get the phrases (without removing stop words from original document) and their frequency count
 nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma,depparse')
 doc = nlp(txt)
 for sent in doc.sentences:
@@ -37,6 +42,7 @@ for sent in doc.sentences:
             else:
                 phrase_l[phrase] = 1
 
+# get the words (that is not a stop word) and their frequency count
 txt = txt.translate(str.maketrans('', '', string.punctuation))
 txt = txt.split(" ")
 num_l = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
@@ -48,15 +54,17 @@ for word in txt:
         else:
             term_l[word] = 1
 
+# print result
 print(dict(sorted(phrase_l.items(), key=operator.itemgetter(1), reverse=True)))
 print(dict(sorted(term_l.items(), key=operator.itemgetter(1), reverse=True)))
 term_l_cp = dict(sorted(term_l.items(), key=operator.itemgetter(1), reverse=True))
 
-#remove top 5%
+# remove term whose frequency is in the top 5% among all
 num_remove = len(terms_l)*0.05
 for i in range(0, num_remove):
     term_l.remove(term_l_cp.keys()[i])
 
+# remove term whose frequency count is <= 20
 for term in term_l:
     if term_l[term] <= 20:
         term_l.remove(term_l[term])
