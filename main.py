@@ -23,8 +23,8 @@ sw_l = stopwords('en')
 
 
 # read filename file
-with open('filepath','r') as f:
-    txtName = f.readline()
+with open('./', 'r') as f:
+    txtName = "test.csv"
     while txtName:
         txt = open(txtName + ".txt", "r")
         txt = str(txt.read())
