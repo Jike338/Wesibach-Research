@@ -24,6 +24,7 @@ sw_l = stopwords('en')
 txt = open("patent_40.txt", "r")
 txt = str(txt.read())
 
+
 # get the phrases (without removing stop words from original document) and their frequency count
 nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma,depparse')
 doc = nlp(txt)
@@ -60,11 +61,11 @@ print(dict(sorted(term_l.items(), key=operator.itemgetter(1), reverse=True)))
 term_l_cp = dict(sorted(term_l.items(), key=operator.itemgetter(1), reverse=True))
 
 # remove term whose frequency is in the top 5% among all
-num_remove = len(terms_l)*0.05
-for i in range(0, num_remove):
-    term_l.remove(term_l_cp.keys()[i])
-
-# remove term whose frequency count is <= 20
-for term in term_l:
-    if term_l[term] <= 20:
-        term_l.remove(term_l[term])
+# num_remove = len(term_l)*0.05
+# for i in range(0, num_remove):
+#     term_l.remove(term_l_cp.keys()[i])
+#
+# # remove term whose frequency count is <= 20
+# for term in term_l:
+#     if term_l[term] <= 20:
+#         term_l.remove(term_l[term])
