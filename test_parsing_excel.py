@@ -6,9 +6,19 @@ import string
 import operator
 import numpy as np
 # to read data in a single excel file
-new_csv = pd.read_csv("test_2.csv")
-new_csv = new_csv['descriptions']
+csv = pd.read_csv("test_2.csv")
+csv['all'] = csv[csv.columns[1:]].apply(
+    lambda x: ' '.join(x.dropna().astype(str)),
+    axis=1
+)
 
+new_csv = csv['all']
+
+
+# wku = new_csv['wku']
+
+stanza.download('en')
+nlp = stanza.Pipeline('en') 
 # dictionary for phrase and term
 phrase_l = {}
 term_l = {}
@@ -19,7 +29,7 @@ sw_l = stopwords('en')
 counter = 1
 for txt in new_csv:
 
-    # we omit those that are empty
+    # we omit those that are 1
     if not isinstance(txt, str):
         continue
 
