@@ -5,6 +5,8 @@ from stopwordsiso import stopwords
 import string
 import operator
 import numpy as np
+import json
+
 # to read data in a single excel file
 csv = pd.read_csv("test_2.csv")
 csv['all'] = csv[csv.columns[1:]].apply(
@@ -36,10 +38,12 @@ for txt in new_csv:
     print("Processing document #: " + str(counter))
 
     # periodically save our variable values
-    if counter % 50 == 0:
-        np.savetxt('phrase_l.txt', phrase_l)
-        np.savetxt('term_l.txt', term_l)
-    counter += 1
+    # if counter % 50 == 0:
+    with open('phrase_l.txt', 'w') as convert_file:
+        convert_file.write(json.dumps(phrase_l))
+    with open('term_l.txt', 'w') as convert_file:
+        convert_file.write(json.dumps(term_l))
+    # counter += 1
 
     # get the phrases (without removing stop words from original document) and their frequency count
     nlp = stanza.Pipeline(lang='en', processors='tokenize,mwt,pos,lemma,depparse')
