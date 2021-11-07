@@ -35,8 +35,10 @@ for num, txt in enumerate(new_csv):
     if not str(txt)[0].isnumeric():
         continue
     tokenization = nltk.word_tokenize(curr_doc) 
-    print(num)
-    tokenization_l.append(listToString(tokenization))
+    tokenization_value = listToString(tokenization)
+    tokenization_wku = tokenization_value[0:7]
+    tokenization_value = tokenization_value[7:]
+    tokenization_l.append({tokenization_wku, tokenization_value})
 
-df = pd.DataFrame(tokenization_l, columns=['value'])
+df = pd.DataFrame(tokenization_l, columns=['wku', 'value'])
 df.to_csv('res2.csv', index=False)
