@@ -34,7 +34,7 @@ if __name__ == "__main__":
         lambda x: ' '.join(x.dropna().astype(str)),
         axis=1
     )
-    new_csv = csv['wku']+csv['all']
+    new_csv = str(csv['wku'])+csv['all']
     new_csv = new_csv.dropna()
     new_csv = new_csv.reset_index(drop=True)
     tokenization_l = []
