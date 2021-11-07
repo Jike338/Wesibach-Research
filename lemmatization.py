@@ -1,7 +1,7 @@
 import nltk
 from nltk.stem import 	WordNetLemmatizer
 import pandas as pd
-from csv import DictReader
+import csv as csvWriter
 
 nltk.download('punkt')
 nltk.download('wordnet')
@@ -38,7 +38,13 @@ for num, txt in enumerate(new_csv):
     tokenization_value = listToString(tokenization)
     tokenization_wku = tokenization_value[0:7]
     tokenization_value = tokenization_value[7:]
-    tokenization_l.append({tokenization_wku, tokenization_value})
+    tokenization_l.append({'wku': tokenization_wku, 'value': tokenization_value})
 
-df = pd.DataFrame(tokenization_l, columns=['wku', 'value'])
-df.to_csv('res2.csv', index=False)
+# df = pd.DataFrame(tokenization_l, columns=['wku', 'value'])
+# df.to_csv('res2.csv', index=False)
+
+with open('res.csv', 'w') as csvfile:
+    writer = csvWriter.writer(csvfile)
+    writer.writerow(['wku', 'value'])
+    for patent in tokenization_l:
+        writer.writerow([patent['wku'], patent['value']])
