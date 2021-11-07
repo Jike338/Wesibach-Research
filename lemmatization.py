@@ -9,7 +9,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Training Station')
     parser.add_argument('--csv', type= str, required = True)
     args = parser.parse_args()
-    
+    print(pd.__version__)
 
     nltk.download('punkt')
     nltk.download('wordnet')
@@ -30,12 +30,12 @@ if __name__ == "__main__":
     print("--------------------------reading csv--------------------------")
     # to read data in a single excel file
     csv = pd.read_csv(str(args.csv))
-    print(len(csv))
     csv['all'] = csv[csv.columns[1:]].apply(
         lambda x: ' '.join(x.dropna().astype(str)),
         axis=1
     )
-    new_csv = str(csv['wku'])+csv['all']
+    
+    new_csv = csv['wku'].map(str) +csv['all'].map(str)
     new_csv = new_csv.dropna()
     new_csv = new_csv.reset_index(drop=True)
     tokenization_l = []
