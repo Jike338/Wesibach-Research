@@ -19,14 +19,14 @@ csv['all'] = csv[csv.columns[1:]].apply(
     axis=1
 )
 new_csv = csv['wku']+csv['all']
+new_csv = new_csv.dropna()
 last_doc = ""
 for num, txt in enumerate(new_csv):
-    print(len(txt))
-    
+    curr_doc = ""
+    last_doc = txt
     if str(txt)[0].isnumeric():
-        last_doc = txt
+        curr_doc = txt
     else:
-        last_doc = last_doc + " " + txt
-    print(len(last_doc))
-    print(last_doc[0])
-    tokenization = nltk.word_tokenize(last_doc)    
+        curr_doc = last_doc + " " + curr_doc
+    tokenization = nltk.word_tokenize(curr_doc)    
+    print(tokenization)
