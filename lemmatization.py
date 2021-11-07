@@ -29,7 +29,7 @@ if __name__ == "__main__":
 
     print("--------------------------reading csv--------------------------")
     # to read data in a single excel file
-    csv = pd.read_csv(args.csv)
+    csv = pd.read_csv(str(args.csv))
     csv['all'] = csv[csv.columns[1:]].apply(
         lambda x: ' '.join(x.dropna().astype(str)),
         axis=1
@@ -62,7 +62,7 @@ if __name__ == "__main__":
 
     print("--------------------------writing csv--------------------------")
     
-    out_file_name = args.csv.split('.')[0]+"_l.csv"
+    out_file_name = str(args.csv).split('.')[0]+"_l.csv"
     with open(out_file_name, 'w') as csvfile:
         writer = csvWriter.writer(csvfile)
         writer.writerow(['wku', 'value'])
