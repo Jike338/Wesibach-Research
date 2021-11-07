@@ -19,6 +19,14 @@ if __name__ == "__main__":
         str1 = " "
         return (str1.join(s))
 
+    def lemmatize(in_list):
+        out_list = []
+        for word in in_list: 
+            word = wordnet_lemmatizer.lemmatize(word)
+            out_list.append(word)
+        
+        return out_list
+
     print("--------------------------reading csv--------------------------")
     # to read data in a single excel file
     csv = pd.read_csv(args.csv)
@@ -43,8 +51,8 @@ if __name__ == "__main__":
         if not str(txt)[0].isnumeric():
             continue
         tokenization = nltk.word_tokenize(curr_doc) 
-        tokenization_value = listToString(tokenization)
-        tokenization_value = wordnet_lemmatizer.lemmatize(tokenization_value)
+        tokenization_value = lemmatize(tokenization)
+        tokenization_value = listToString(tokenization_value)
         tokenization_wku = tokenization_value[0:7]
         tokenization_value = tokenization_value[7:]
         tokenization_l.append({'wku': tokenization_wku, 'value': tokenization_value})
