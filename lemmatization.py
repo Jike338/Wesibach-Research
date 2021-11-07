@@ -23,15 +23,17 @@ csv['all'] = csv[csv.columns[1:]].apply(
 )
 new_csv = csv['wku']+csv['all']
 new_csv = new_csv.dropna()
-last_doc = ""
+new_csv = new_csv.reset_index(drop=True)
 tokenization_l = []
+
 for num, txt in enumerate(new_csv):
-    curr_doc = ""
-    last_doc = txt
+    curr_doc = txt
+    if num < len(new_csv)-1:
+        if not str(new_csv[num+1])[0].isnumeric():
+            curr_doc = curr_doc + " " + new_csv[num+1]
+    
     if str(txt)[0].isnumeric():
-        curr_doc = txt
-    else:
-        curr_doc = last_doc + " " + curr_doc
+        continue
     tokenization = nltk.word_tokenize(curr_doc) 
     tokenization_l.append(listToString(tokenization))
 
