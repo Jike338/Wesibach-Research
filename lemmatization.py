@@ -2,49 +2,61 @@ import nltk
 from nltk.stem import 	WordNetLemmatizer
 import pandas as pd
 import csv as csvWriter
+import argparse
 
-nltk.download('punkt')
-nltk.download('wordnet')
-wordnet_lemmatizer = WordNetLemmatizer()
-text = "studies studying cries cry"
-tokenization = nltk.word_tokenize(text)
-for w in tokenization:
-    print("Lemma for {} is {}".format(w, wordnet_lemmatizer.lemmatize(w))) 
 
-def listToString(s):
-    str1 = " "
-    return (str1.join(s))
-
-# to read data in a single excel file
-csv = pd.read_csv("31.csv")
-csv['all'] = csv[csv.columns[1:]].apply(
-    lambda x: ' '.join(x.dropna().astype(str)),
-    axis=1
-)
-new_csv = csv['wku']+csv['all']
-new_csv = new_csv.dropna()
-new_csv = new_csv.reset_index(drop=True)
-tokenization_l = []
-
-for num, txt in enumerate(new_csv):
-    curr_doc = txt
-    if num < len(new_csv)-1:
-        if not str(new_csv[num+1])[0].isnumeric():
-            curr_doc = curr_doc + " " + new_csv[num+1]
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Training Station')
+    parser.add_argument('--csv', type= str, required = True)
+    args = parser.parse_args()
     
-    if not str(txt)[0].isnumeric():
-        continue
-    tokenization = nltk.word_tokenize(curr_doc) 
-    tokenization_value = listToString(tokenization)
-    tokenization_wku = tokenization_value[0:7]
-    tokenization_value = tokenization_value[7:]
-    tokenization_l.append({'wku': tokenization_wku, 'value': tokenization_value})
 
-# df = pd.DataFrame(tokenization_l, columns=['wku', 'value'])
-# df.to_csv('res2.csv', index=False)
+    nltk.download('punkt')
+    nltk.download('wordnet')
+    wordnet_lemmatizer = WordNetLemmatizer()
 
-with open('res.csv', 'w') as csvfile:
-    writer = csvWriter.writer(csvfile)
-    writer.writerow(['wku', 'value'])
-    for patent in tokenization_l:
-        writer.writerow([patent['wku'], patent['value']])
+    def listToString(s):
+        str1 = " "
+        return (str1.join(s))
+
+    print("--------------------------reading csv--------------------------")
+    # to read data in a single excel file
+    csv = pd.read_csv(args.csv)
+    csv['all'] = csv[csv.columns[1:]].apply(
+        lambda x: ' '.join(x.dropna().astype(str)),
+        axis=1
+    )
+    new_csv = csv['wku']+csv['all']
+    new_csv = new_csv.dropna()
+    new_csv = new_csv.reset_index(drop=True)
+    tokenization_l = []
+
+    print("--------------------------lemmatizing--------------------------")
+
+    for num, txt in enumerate(new_csv):
+        print("Processing document #: ", num)
+        curr_doc = txt
+        if num < len(new_csv)-1:
+            if not str(new_csv[num+1])[0].isnumeric():
+                curr_doc = curr_doc + " " + new_csv[num+1]
+        
+        if not str(txt)[0].isnumeric():
+            continue
+        tokenization = nltk.word_tokenize(curr_doc) 
+        tokenization_value = listToString(tokenization)
+        tokenization_value = wordnet_lemmatizer.lemmatize(tokenization_value)
+        tokenization_wku = tokenization_value[0:7]
+        tokenization_value = tokenization_value[7:]
+        tokenization_l.append({'wku': tokenization_wku, 'value': tokenization_value})
+
+    # df = pd.DataFrame(tokenization_l, columns=['wku', 'value'])
+    # df.to_csv('res2.csv', index=False)
+
+    print("--------------------------writing csv--------------------------")
+    
+    out_file_name = args.csv.split('.')[0]+"_l.csv"
+    with open(out_file_name, 'w') as csvfile:
+        writer = csvWriter.writer(csvfile)
+        writer.writerow(['wku', 'value'])
+        for patent in tokenization_l:
+            writer.writerow([patent['wku'], patent['value']])
