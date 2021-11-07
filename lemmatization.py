@@ -32,9 +32,10 @@ for num, txt in enumerate(new_csv):
         if not str(new_csv[num+1])[0].isnumeric():
             curr_doc = curr_doc + " " + new_csv[num+1]
     
-    if str(txt)[0].isnumeric():
+    if not str(txt)[0].isnumeric():
         continue
     tokenization = nltk.word_tokenize(curr_doc) 
+    print(num)
     tokenization_l.append(listToString(tokenization))
 
 df = pd.DataFrame(tokenization_l, columns=['value'])
