@@ -30,6 +30,7 @@ if __name__ == "__main__":
     print("--------------------------reading csv--------------------------")
     # to read data in a single excel file
     csv = pd.read_csv(str(args.csv))
+    print(len(csv))
     csv['all'] = csv[csv.columns[1:]].apply(
         lambda x: ' '.join(x.dropna().astype(str)),
         axis=1
