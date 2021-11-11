@@ -4,7 +4,7 @@ from nltk.corpus import wordnet
 import pandas as pd
 import csv as csvWriter
 import argparse
-
+import string
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Training Station')
@@ -20,6 +20,15 @@ if __name__ == "__main__":
     def listToString(s):
         str1 = " "
         return (str1.join(s))
+
+    def construct_sentence_from_list(l):
+        res = ""
+        for word in l:
+            if word not in string.punctuation:
+                res += " " + word
+            else:
+                res += word 
+        return res
 
     def lemmatize(in_list):
         out_list = []
@@ -55,7 +64,8 @@ if __name__ == "__main__":
             else:        
                 #else use the tag to lemmatize the token
                 lemmatized_sentence.append(wordnet_lemmatizer.lemmatize(word, tag))
-        return " ".join(lemmatized_sentence)
+            
+        return construct_sentence_from_list(lemmatized_sentence)
 
     print("--------------------------reading csv--------------------------")
     # to read data in a single excel file
